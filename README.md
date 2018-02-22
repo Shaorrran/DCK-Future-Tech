@@ -6,7 +6,7 @@ DCK Shields help protect your invisible armor (in DCKinc) from getting scratched
 
 DCK Active Camo makes your craft invisible and hides you from enemy radar when activated
 
-DCK NanoTech regenerates your crafts' HitPoints when active ... The Nanites use GLUE (Galvanized Liquid Universal Epoxy) to generate HP (master control part included)
+DCK NanoTech regenerates the HitPoints of all non engine parts when active ... The Nanites use GLUE (Galvanized Liquid Universal Epoxy) to generate HP (master control part included)
 
 Build Status License: GPL v3 License
 
