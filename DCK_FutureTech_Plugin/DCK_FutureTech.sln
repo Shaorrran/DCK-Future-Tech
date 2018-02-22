@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DCK_FutureTech", "DCK_FutureTech.csproj", "{BFE97E64-BF01-48AF-81EE-6B2610076542}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BFE97E64-BF01-48AF-81EE-6B2610076542}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFE97E64-BF01-48AF-81EE-6B2610076542}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFE97E64-BF01-48AF-81EE-6B2610076542}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFE97E64-BF01-48AF-81EE-6B2610076542}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F0775E26-88CE-460C-B361-DCD12F6F0691}
+	EndGlobalSection
+EndGlobal
