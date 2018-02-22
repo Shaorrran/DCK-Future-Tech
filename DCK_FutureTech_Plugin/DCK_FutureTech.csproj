@@ -72,11 +72,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ModuleDCKNanites.cs" />
-    <Compile Include="ModuleDCKNanoTech.cs" />
-    <Compile Include="ModuleDCKStealth.cs" />
-    <Compile Include="ModuleDCKACS.cs" />
-    <Compile Include="ModuleDCKShields.cs" />
+    <Compile Include="Modules\ModuleDCKNanites.cs" />
+    <Compile Include="Modules\ModuleDCKNanoTech.cs" />
+    <Compile Include="Modules\ModuleDCKStealth.cs" />
+    <Compile Include="Modules\ModuleDCKACS.cs" />
+    <Compile Include="Modules\ModuleDCKShields.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

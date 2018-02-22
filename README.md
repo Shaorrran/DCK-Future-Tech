@@ -22,17 +22,8 @@ You should have received a copy of the GNU General Public License along with thi
 This KSP Mod incorporates code from the Cloaking Device mod ... All credit goes to @wasml 
 http://spacedock.info/mod/217/Cloaking%20Device
 
-All code used from the Cloaking Device mod has been absorbed into DCK via one-way compatibility from CC BY-SA 4.0 to GPLv3 and is now released under GPLv3
+All code used from the Cloaking Device mod has been absorbed into DCK Future Tech via one-way compatibility from CC BY-SA 4.0 to GPLv3 and is now released under GPLv3
 https://creativecommons.org/2015/10/08/cc-by-sa-4-0-now-one-way-compatible-with-gplv3/
-
-
-This KSP Mod incorporates code from a part of USITools and is used under the GPLv3 License. 
-https://github.com/UmbraSpaceIndustries/UmbraSpaceIndustries/blob/master/USITools/USITools/PartCatalog.cs
-
-
-This KSP Mod incorporates modified code from a Default Action Groups and is used under the CC BY-NC-ND 4.0 License. All credit goes to Snark for code related to this feature.
-https://github.com/KSPSnark/DefaultActionGroups
-https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode
 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
