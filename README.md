@@ -1,12 +1,12 @@
 Davinci's Combat Kit - Future Tech
 
-DCK Future Tech contains Stealth Coating parts (YCSM - You Can't See Me) that reduces the radar cross section of the craft it is attached to when using the YCSM part in conjunction with BDAc 
+DCK Future Tech contains Stealth Coating parts (YCSM - You Can't See Me) that reduces the radar cross section of the craft it is attached to
 
-DCK Shields help protect your invisible armor from getting scratched ... They regenerate HitPoints over time
+DCK Shields help protect your invisible armor (in DCKinc) from getting scratched ... They regenerate HitPoints over time using EC
 
-DCK Active Camo hides you from enemy radar when used in conjunction with ... DO NOT USE WITH YCSM MODULES or any BDAc ECM jammer that is set to be always on
+DCK Active Camo makes your craft invisible and hides you from enemy radar when activated
 
-DCK NanoTech regenerates your crafts' HitPoints when active
+DCK NanoTech regenerates your crafts' HitPoints when active ... The Nanites use GLUE (Galvanized Liquid Universal Epoxy) to generate HP (master control part included)
 
 Build Status License: GPL v3 License
 
