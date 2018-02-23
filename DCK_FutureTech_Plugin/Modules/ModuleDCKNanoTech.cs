@@ -48,7 +48,7 @@ namespace DCK_FutureTech
             base.OnFixedUpdate();
         }
 
-        public void OverrideNanites()
+        private void OverrideNanites()
         {
             List<ModuleDCKNanites> nanoParts = new List<ModuleDCKNanites>(200);
             foreach (Part p in vessel.Parts)
@@ -61,7 +61,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void NanoRepairOn()
+        private void NanoRepairOn()
         {
             List<ModuleDCKNanites> nanoParts = new List<ModuleDCKNanites>(200);
             foreach (Part p in vessel.Parts)
@@ -77,7 +77,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void NanoRepairOff()
+        private void NanoRepairOff()
         {
             List<ModuleDCKNanites> nanoParts = new List<ModuleDCKNanites>(200);
             foreach (Part p in vessel.Parts)

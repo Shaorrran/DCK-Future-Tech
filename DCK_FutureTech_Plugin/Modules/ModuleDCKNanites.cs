@@ -134,7 +134,7 @@ namespace DCK_FutureTech
         /// <summary>
         /// Resources
         /// </summary>
-        public void GenerateHP()
+        private void GenerateHP()
         {
             float HPtoAdd = 0.0f;
             if (hpTracker.Hitpoints < hpMax * 0.99f)
@@ -151,7 +151,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void GenerateArmor()
+        private void GenerateArmor()
         {
             float ArmorToAdd = 0.0f;
             if (hpTracker.Armor < armorMax * 0.99)

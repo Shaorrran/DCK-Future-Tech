@@ -108,7 +108,7 @@ namespace DCK_FutureTech
             ScreenMessages.PostScreenMessage(new ScreenMessage(msg, 4, ScreenMessageStyle.UPPER_CENTER));
         }
 
-        public void UnderFirecheck()
+        private void UnderFirecheck()
         {
             List<MissileFire> wmParts = new List<MissileFire>(200);
             foreach (Part p in vessel.Parts)
@@ -128,7 +128,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void CheckShieldState()
+        private void CheckShieldState()
         {
             if (shieldState.IsCooling)
             {
@@ -174,7 +174,7 @@ namespace DCK_FutureTech
         /// Resources
         /// </summary>
 
-        public void GenerateHP()
+        private void GenerateHP()
         {
             float HPtoAdd = 0;
             if (hpTracker.Hitpoints < hpTracker.maxHitPoints * 0.95f)
@@ -191,7 +191,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void GenerateArmor()
+        private void GenerateArmor()
         {
             float ArmorToAdd = 0;
             if (hpTracker.Armor < armorMax * 0.95f)
@@ -208,12 +208,12 @@ namespace DCK_FutureTech
             }
         }
 
-        public void CheckArmorMax()
+        private void CheckArmorMax()
         {
             armorMax = hpTracker.Armor;
         }
 
-        public void CheckShieldHP()
+        private void CheckShieldHP()
         {
             if (hpTracker.Hitpoints < hpTracker.maxHitPoints * 0.15)
             {
@@ -332,7 +332,7 @@ namespace DCK_FutureTech
             RetractShields();
         }
 
-        public void DeployShields()
+        private void DeployShields()
         {
             if (shieldCheck != null)
             {
@@ -340,7 +340,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void RetractShields()
+        private void RetractShields()
         {
             if (shieldCheck != null)
             {

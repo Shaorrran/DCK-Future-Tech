@@ -72,6 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DCK_FutureTech.cs" />
     <Compile Include="Modules\ModuleDCKNanites.cs" />
     <Compile Include="Modules\ModuleDCKNanoTech.cs" />
     <Compile Include="Modules\ModuleDCKStealth.cs" />

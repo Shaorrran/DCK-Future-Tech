@@ -63,17 +63,17 @@ namespace DCK_FutureTech
         private bool targeted = false;
         private float fadePerTime = 0.5f;
         private bool currentShadowState = true;
-        public bool pauseRoutine;
-        public bool coolDown = false;
-        public bool resourceAvailable;
-        public bool fullRenderHide = true;
+        private bool pauseRoutine;
+        private bool coolDown = false;
+        private bool resourceAvailable;
+        private bool fullRenderHide = true;
         private bool recalcCloak = true;
-        public float visiblilityLevel = UNCLOAKED;
-        public float areaExponet = 0.5f;
-        public float ECPerSec = 1.0f; // Electric charge per second
-        public float fadeTime = 1.0f; // In seconds
-        public float shadowCutoff = 0.0f;
-        public bool selfCloak = true;
+        private float visiblilityLevel = UNCLOAKED;
+        private float areaExponet = 0.5f;
+        private float ECPerSec = 1.0f; // Electric charge per second
+        private float fadeTime = 1.0f; // In seconds
+        private float shadowCutoff = 0.0f;
+        private bool selfCloak = true;
 
         //---------------------------------------------------------------------
 
@@ -284,7 +284,7 @@ namespace DCK_FutureTech
         }
 
 
-        public void UnderFirecheck()
+        private void UnderFirecheck()
         {
             List<MissileFire> wmParts = new List<MissileFire>(200);
             foreach (Part p in vessel.Parts)
@@ -304,7 +304,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void BDAcCheck()
+        private void BDAcCheck()
         {
             UnderFirecheck();
 
@@ -332,7 +332,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void BDAcJammerEnable()
+        private void BDAcJammerEnable()
         {
             stealthCheck = CheckRCS();
 
@@ -342,7 +342,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void BDAcJammerDisable()
+        private void BDAcJammerDisable()
         {
             stealthCheck = CheckRCS();
 
@@ -352,7 +352,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void BDAcJammerRCS0()
+        private void BDAcJammerRCS0()
         {
             stealthCheck = CheckRCS();
 
@@ -362,7 +362,7 @@ namespace DCK_FutureTech
             stealthCheck.lockBreakerStrength = 2000;
         }
 
-        public void BDAcJammerRCS1()
+        private void BDAcJammerRCS1()
         {
             stealthCheck = CheckRCS();
 
@@ -372,7 +372,7 @@ namespace DCK_FutureTech
             stealthCheck.lockBreakerStrength = 0;
         }
 
-        public void radarOn()
+        private void radarOn()
         {
             List<ModuleRadar> radarParts = new List<ModuleRadar>(200);
             foreach (Part p in vessel.Parts)
@@ -388,7 +388,7 @@ namespace DCK_FutureTech
             }
         }
 
-        public void radarOff()
+        private void radarOff()
         {
             List<ModuleRadar> radarParts = new List<ModuleRadar>(200);
             foreach (Part p in vessel.Parts)
@@ -403,14 +403,14 @@ namespace DCK_FutureTech
                 }
             }
         }
-#endregion
+        #endregion
 
         #region Cloak
         /// <summary>
         /// Cloak code
         /// </summary>
         /// 
-        public void engageCloak()
+        private void engageCloak()
         {
             if (resourceAvailable)
             {
@@ -430,8 +430,8 @@ namespace DCK_FutureTech
                 BDAcJammerDisable();
             }
         }
-        
-        public void disengageCloak()
+
+        private void disengageCloak()
         {
             if (cloakOn)
             {
