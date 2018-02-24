@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using KSP.UI.Screens;
 using UnityEngine;
-using BDArmory.Core.Module;
 
-// ReSharper disable NotAccessedField.Local
 
 namespace DCK_FutureTech
 {
     [KSPAddon(KSPAddon.Startup.EditorAny, false)]
     public class DCK_FutureTech : MonoBehaviour
     {
-        private const float WindowWidth = 150;
+        private const float WindowWidth = 140;
         private const float DraggableHeight = 40;
         private const float LeftIndent = 12;
         private const float ContentTop = 20;
@@ -23,16 +21,18 @@ namespace DCK_FutureTech
         private readonly float entryHeight = 20;
         private float _contentWidth;
         private bool _gameUiToggle;
-        private string _guiHP = String.Empty;
-        private string _guiArmor = String.Empty;
+        public string _guiHP = String.Empty;
+        public string _guiArmor = String.Empty;
         private float _windowHeight = 250;
         private Rect _windowRect;
-        private bool addTotal;
-        private HitpointTracker hpTracker;
-
-        private bool MLF;
+        private bool MLS;
+        private bool MCS;
         private bool engines;
         private bool allParts;
+        private bool fuelTank;
+        private bool command;
+        private bool shipHull;
+        private bool structural;
 
         private void Awake()
         {
@@ -53,13 +53,410 @@ namespace DCK_FutureTech
             _guiHP = "0";
         }
 
-        // ReSharper disable once InconsistentNaming
         private void OnGUI()
         {
             if (GuiEnabled && _gameUiToggle)
                 _windowRect = GUI.Window(320, _windowRect, GuiWindow, "");
         }
 
+        #region HP/Armor Adjust
+        /// <summary>
+        /// HP/Armor Adjust
+        /// </summary>
+        private void AdjustHP()
+        {
+            Part root = EditorLogic.RootPart;
+            if (!root)
+                return;
+
+            if (allParts)
+            {
+                HPAllParts();
+            }
+
+            if (command)
+            {
+                HPCommand();
+            }
+
+            if (fuelTank)
+            {
+                HPFuelTank();
+            }
+
+            if (MCS)
+            {
+                HPMCS();
+            }
+
+            if (MLS)
+            {
+                HPMLS();
+            }
+
+            if (engines)
+            {
+                HPEngines();
+            }
+
+            if (shipHull)
+            {
+                HPShipHull();
+            }
+
+            if (structural)
+            {
+                HPStructural();
+            }
+        }
+
+        private void AdjustArmor()
+        {
+            Part root = EditorLogic.RootPart;
+            if (!root)
+                return;
+
+            if (allParts)
+            {
+                ArmorAllParts();
+            }
+
+            if (command)
+            {
+                ArmorCommand();
+            }
+
+            if (fuelTank)
+            {
+                ArmorFuelTank();
+            }
+
+            if (MCS)
+            {
+                ArmorMCS();
+            }
+
+            if (MLS)
+            {
+                ArmorMLS();
+            }
+
+            if (engines)
+            {
+                ArmorEngines();
+            }
+
+            if (shipHull)
+            {
+                ArmorShipHull();
+            }
+
+            if (structural)
+            {
+                ArmorStructural();
+            }
+        }
+
+        #region HP
+        /// <summary>
+        /// HP
+        /// </summary>
+        private void HPAllParts()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                var guiHP = float.Parse(_guiHP);
+                identifiedPart.adjustedHP = guiHP;
+                identifiedPart.AdjustHP();
+            }
+        }
+
+        private void HPCommand()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.command)
+                {
+                    var guiHP = float.Parse(_guiHP);
+                    identifiedPart.adjustedHP = guiHP;
+                    identifiedPart.AdjustHP();
+                }
+            }
+        }
+
+        private void HPFuelTank()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.fuelTank)
+                {
+                    var guiHP = float.Parse(_guiHP);
+                    identifiedPart.adjustedHP = guiHP;
+                    identifiedPart.AdjustHP();
+                }
+            }
+        }
+
+        private void HPMCS()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.MCS)
+                {
+                    var guiHP = float.Parse(_guiHP);
+                    identifiedPart.adjustedHP = guiHP;
+                    identifiedPart.AdjustHP();
+                }
+            }
+        }
+
+        private void HPMLS()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.MLS)
+                {
+                    var guiHP = float.Parse(_guiHP);
+                    identifiedPart.adjustedHP = guiHP;
+                    identifiedPart.AdjustHP();
+                }
+            }
+        }
+
+        private void HPStructural()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.structural)
+                {
+                    var guiHP = float.Parse(_guiHP);
+                    identifiedPart.adjustedHP = guiHP;
+                    identifiedPart.AdjustHP();
+                }
+            }
+        }
+
+        private void HPEngines()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.engine)
+                {
+                    var guiHP = float.Parse(_guiHP);
+                    identifiedPart.adjustedHP = guiHP;
+                    identifiedPart.AdjustHP();
+                }
+            }
+        }
+
+        private void HPShipHull()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.shipHull || identifiedPart.ballastTank)
+                {
+                    var guiHP = float.Parse(_guiHP);
+                    identifiedPart.adjustedHP = guiHP;
+                    identifiedPart.AdjustHP();
+                }
+            }
+        }
+
+        #endregion
+
+        #region Armor
+        /// <summary>
+        /// Armor
+        /// </summary>
+        private void ArmorAllParts()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                var guiArmor = float.Parse(_guiArmor);
+                identifiedPart.adjustedHP = guiArmor;
+                identifiedPart.AdjustArmor();
+            }
+        }
+
+        private void ArmorCommand()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.command)
+                {
+                    var guiArmor = float.Parse(_guiArmor);
+                    identifiedPart.adjustedHP = guiArmor;
+                    identifiedPart.AdjustArmor();
+                }
+            }
+        }
+
+        private void ArmorFuelTank()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.fuelTank)
+                {
+                    var guiArmor = float.Parse(_guiArmor);
+                    identifiedPart.adjustedHP = guiArmor;
+                    identifiedPart.AdjustArmor();
+                }
+            }
+        }
+
+        private void ArmorMCS()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.MCS)
+                {
+                    var guiArmor = float.Parse(_guiArmor);
+                    identifiedPart.adjustedHP = guiArmor;
+                    identifiedPart.AdjustArmor();
+                }
+            }
+        }
+
+        private void ArmorMLS()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.MLS)
+                {
+                    var guiArmor = float.Parse(_guiArmor);
+                    identifiedPart.adjustedHP = guiArmor;
+                    identifiedPart.AdjustArmor();
+                }
+            }
+        }
+
+        private void ArmorStructural()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.structural)
+                {
+                    var guiArmor = float.Parse(_guiArmor);
+                    identifiedPart.adjustedHP = guiArmor;
+                    identifiedPart.AdjustHP();
+                }
+            }
+        }
+
+        private void ArmorEngines()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.engine)
+                {
+                    var guiArmor = float.Parse(_guiArmor);
+                    identifiedPart.adjustedHP = guiArmor;
+                    identifiedPart.AdjustArmor();
+                }
+            }
+        }
+
+        private void ArmorShipHull()
+        {
+            List<ModuleDCKPartID> identifiedParts = new List<ModuleDCKPartID>(200);
+            foreach (Part p in EditorLogic.fetch.ship.Parts)
+            {
+                identifiedParts.AddRange(p.FindModulesImplementing<ModuleDCKPartID>());
+            }
+            foreach (ModuleDCKPartID identifiedPart in identifiedParts)
+            {
+                if (identifiedPart.shipHull || identifiedPart.ballastTank)
+                {
+                    var guiArmor = float.Parse(_guiArmor);
+                    identifiedPart.adjustedHP = guiArmor;
+                    identifiedPart.AdjustArmor();
+                }
+            }
+        }
+
+        #endregion
+
+        #endregion
+
+        #region GUI
+        /// <summary>
+        /// GUI
+        /// </summary>
         private void GuiWindow(int windowId)
         {
             GUI.DragWindow(new Rect(0, 0, WindowWidth, DraggableHeight));
@@ -67,6 +464,24 @@ namespace DCK_FutureTech
             _contentWidth = WindowWidth - 2 * LeftIndent;
 
             DrawTitle();
+            DrawText(line);
+            line++;
+            AllParts(line);
+            line++;
+            moduleCommand(line);
+            line++;
+            moduleLiftingSurface(line);
+            line++;
+            moduleControlSurface(line);
+            line++;
+            FuelTanks(line);
+            line++;
+            Engines(line);
+            line++;
+            Structural(line);
+            line++;
+            ShipHull(line);
+            line++;
             line++;
             DrawHP(line);
             line++;
@@ -81,7 +496,42 @@ namespace DCK_FutureTech
             _windowRect.height = _windowHeight;
         }
 
-        private void DrawText(float line)
+        private void AddToolbarButton()
+        {
+            string textureDir = "DCK_FutureTech/Plugin/";
+
+            if (!HasAddedButton)
+            {
+                Texture buttonTexture = GameDatabase.Instance.GetTexture(textureDir + "DCK_FT", false); //texture to use for the button
+                ApplicationLauncher.Instance.AddModApplication(EnableGui, DisableGui, Dummy, Dummy, Dummy, Dummy,
+                    ApplicationLauncher.AppScenes.ALWAYS, buttonTexture);
+                HasAddedButton = true;
+            }
+        }
+
+        private void EnableGui()
+        {
+            GuiEnabled = true;
+            Debug.Log("[DCK_FutureTech]: Showing HP/Armor GUI");
+        }
+
+        private void DisableGui()
+        {
+            GuiEnabled = false;
+            Debug.Log("[DCK_FutureTech]: Hiding HP/Armor GUI");
+        }
+
+        private void GameUiEnable()
+        {
+            _gameUiToggle = true;
+        }
+
+        private void GameUiDisable()
+        {
+            _gameUiToggle = false;
+        }
+
+        private void DrawTitle()
         {
             var centerLabel = new GUIStyle
             {
@@ -90,13 +540,10 @@ namespace DCK_FutureTech
             };
             var titleStyle = new GUIStyle(centerLabel)
             {
-                fontSize = 10,
+                fontSize = 12,
                 alignment = TextAnchor.MiddleCenter
             };
-
-            GUI.Label(new Rect(0, ContentTop + line * entryHeight, WindowWidth, 20),
-                "Parts to Adjust",
-                titleStyle);
+            GUI.Label(new Rect(0, 0, WindowWidth, 20), "HP/Armor Adjustment", titleStyle);
         }
 
         private void DrawHP(float line)
@@ -129,354 +576,173 @@ namespace DCK_FutureTech
 
         private void DrawSaveHP(float line)
         {
-            var saveRect = new Rect(LeftIndent, ContentTop + line * entryHeight, WindowWidth / 2, entryHeight);
-            if (GUI.Button(saveRect, "Apply"))
-                ApplyHP();
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+            if (GUI.Button(saveRect, "Save HP"))
+            {
+                AdjustHP();
+            }
         }
 
         private void DrawSaveArmor(float line)
         {
-            var saveRect = new Rect(LeftIndent, ContentTop + line * entryHeight, WindowWidth / 2, entryHeight);
-            if (GUI.Button(saveRect, "Apply"))
-                ApplyArmor();
-        }
-
-        private void selectPartModule()
-        {
-            Part root = EditorLogic.RootPart;
-            if (!root)
-                return;
-
-            if (allParts)
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+            if (GUI.Button(saveRect, "Save Armor"))
             {
-//                AllParts();
-                return;
-            }
-
-            if (MLF)
-            {
-                moduleLiftingSurface();
-            }
-
-            if (engines)
-            {
-                moduleEngines();
-                moduleEnginesFX();
+                AdjustArmor();
             }
         }
 
-        private void ApplyHP()
-        {
-            List<HitpointTracker> HPtracker = new List<HitpointTracker>(200);
-            foreach (Part p in EditorLogic.fetch.ship.Parts)
-            {
-                HPtracker.AddRange(p.FindModulesImplementing<HitpointTracker>());
-            }
-            foreach (HitpointTracker hpTracker in HPtracker)
-            {
-                // HitPoints
-                if (hpTracker.Hitpoints >= 0)
-                {
-                    var hpString = _guiHP;
-                    var hpTotal = float.Parse(hpString);
-                    hpTracker.maxHitPoints = hpTotal;
-                    hpTracker.Hitpoints = hpTotal;
-
-                    if (hpTracker.Hitpoints <= 1)
-                    {
-                        hpTracker.maxHitPoints = 1;
-                        hpTracker.Hitpoints = 1;
-                    }
-                }
-            }
-        }
-
-        private void ApplyArmor()
-        {
-            List<HitpointTracker> HPtracker = new List<HitpointTracker>(200);
-            foreach (Part p in EditorLogic.fetch.ship.Parts)
-            {
-                HPtracker.AddRange(p.FindModulesImplementing<HitpointTracker>());
-            }
-            foreach (HitpointTracker hpTracker in HPtracker)
-            {
-                // Armor
-                if (hpTracker.Armor >= 0)
-                {
-                    var armorString = _guiArmor;
-                    float ArmorValue = float.Parse(armorString);
-                    hpTracker.ArmorThickness = ArmorValue;
-                    hpTracker.Armor = ArmorValue;
-
-                    if (hpTracker.Armor <= 1)
-                    {
-                        hpTracker.ArmorThickness = 1;
-                        hpTracker.Armor = 1;
-                    }
-                }
-            }
-        }
-
-
-        private void moduleLiftingSurface()
-        {
-            Part root = EditorLogic.RootPart;
-            if (!root)
-                return;
-
-            List<ModuleLiftingSurface> AeroParts = new List<ModuleLiftingSurface>(200);
-            foreach (Part p in EditorLogic.fetch.ship.Parts)
-            {
-                AeroParts.AddRange(p.FindModulesImplementing<ModuleLiftingSurface>());
-            }
-            foreach (ModuleLiftingSurface aeroPart in AeroParts)
-            {
-                if (aeroPart != null)
-                {
-                    List<HitpointTracker> HPtracker = new List<HitpointTracker>(200);
-                    foreach (HitpointTracker hpTracker in HPtracker)
-                    {
-                        // HitPoints
-                        if (hpTracker.Hitpoints >= 0)
-                        {
-                            var hpString = _guiHP;
-                            var hpTotal = float.Parse(hpString);
-                            hpTracker.maxHitPoints = hpTotal;
-                            hpTracker.Hitpoints = hpTotal;
-
-                            if (hpTracker.Hitpoints <= 1)
-                            {
-                                hpTracker.maxHitPoints = 1;
-                                hpTracker.Hitpoints = 1;
-                            }
-                        }
-
-                        // Armor
-                        if (hpTracker.Armor >= 0)
-                        {
-                            var armorString = _guiArmor;
-                            float ArmorValue = float.Parse(armorString);
-                            hpTracker.ArmorThickness = ArmorValue;
-                            hpTracker.Armor = ArmorValue;
-
-                            if (hpTracker.Armor <= 1)
-                            {
-                                hpTracker.ArmorThickness = 1;
-                                hpTracker.Armor = 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void moduleEngines()
-        {
-            Part root = EditorLogic.RootPart;
-            if (!root)
-                return;
-
-            List<ModuleEngines> EngineParts = new List<ModuleEngines>(200);
-            foreach (Part p in EditorLogic.fetch.ship.Parts)
-            {
-                EngineParts.AddRange(p.FindModulesImplementing<ModuleEngines>());
-            }
-            foreach (ModuleEngines enginePart in EngineParts)
-            {
-                if (enginePart != null)
-                {
-                    List<HitpointTracker> HPtracker = new List<HitpointTracker>(200);
-                    foreach (HitpointTracker hpTracker in HPtracker)
-                    {
-                        // HitPoints
-                        if (hpTracker.Hitpoints >= 0)
-                        {
-                            var hpString = _guiHP;
-                            var hpTotal = float.Parse(hpString);
-                            hpTracker.maxHitPoints = hpTotal;
-                            hpTracker.Hitpoints = hpTotal;
-
-                            if (hpTracker.Hitpoints <= 1)
-                            {
-                                hpTracker.maxHitPoints = 1;
-                                hpTracker.Hitpoints = 1;
-                            }
-                        }
-
-                        // Armor
-                        if (hpTracker.Armor >= 0)
-                        {
-                            var armorString = _guiArmor;
-                            float ArmorValue = float.Parse(armorString);
-                            hpTracker.ArmorThickness = ArmorValue;
-                            hpTracker.Armor = ArmorValue;
-
-                            if (hpTracker.Armor <= 1)
-                            {
-                                hpTracker.ArmorThickness = 1;
-                                hpTracker.Armor = 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void moduleEnginesFX()
-        {
-            Part root = EditorLogic.RootPart;
-            if (!root)
-                return;
-
-            List<ModuleEngines> EngineParts = new List<ModuleEngines>(200);
-            foreach (Part p in EditorLogic.fetch.ship.Parts)
-            {
-                EngineParts.AddRange(p.FindModulesImplementing<ModuleEngines>());
-            }
-            foreach (ModuleEngines enginePart in EngineParts)
-            {
-                if (enginePart != null)
-                {
-                    List<HitpointTracker> HPtracker = new List<HitpointTracker>(200);
-                    foreach (HitpointTracker hpTracker in HPtracker)
-                    {
-                        // HitPoints
-                        if (hpTracker.Hitpoints >= 0)
-                        {
-                            var hpString = _guiHP;
-                            var hpTotal = float.Parse(hpString);
-                            hpTracker.maxHitPoints = hpTotal;
-                            hpTracker.Hitpoints = hpTotal;
-
-                            if (hpTracker.Hitpoints <= 1)
-                            {
-                                hpTracker.maxHitPoints = 1;
-                                hpTracker.Hitpoints = 1;
-                            }
-                        }
-
-                        // Armor
-                        if (hpTracker.Armor >= 0)
-                        {
-                            var armorString = _guiArmor;
-                            float ArmorValue = float.Parse(armorString);
-                            hpTracker.ArmorThickness = ArmorValue;
-                            hpTracker.Armor = ArmorValue;
-
-                            if (hpTracker.Armor <= 1)
-                            {
-                                hpTracker.ArmorThickness = 1;
-                                hpTracker.Armor = 1;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        private void AllParts(float line)
-        {
-            var saveRect = new Rect(LeftIndent, ContentTop + line * entryHeight, contentWidth, entryHeight);
-
-
-            if (allParts)
-            {
-                if (GUI.Button(saveRect, "All{On}"))
-                    allParts = false;
-            }
-            else
-            {
-                if (GUI.Button(saveRect, "All{Off}"))
-                    allParts = true;
-            }
-        }
-
-        private void DrawEngines(float line)
-        {
-            var saveRect = new Rect(LeftIndent, ContentTop + line * entryHeight, contentWidth, entryHeight);
-
-
-            if (engines)
-            {
-                if (GUI.Button(saveRect, "Engine{On}"))
-                    engines = false;
-            }
-            else
-            {
-                if (GUI.Button(saveRect, "Engine{Off}"))
-                    engines = true;
-            }
-        }
-
-        private void DrawLiftingSurface(float line)
-        {
-            var saveRect = new Rect(LeftIndent, ContentTop + line * entryHeight, contentWidth, entryHeight);
-
-
-            if (MLF)
-            {
-                if (GUI.Button(saveRect, "Wings{On}"))
-                    MLF = false;
-            }
-            else
-            {
-                if (GUI.Button(saveRect, "Wings{Off}"))
-                    MLF = true;
-            }
-        }
-
-        private void DrawTitle()
+        private void DrawText(float line)
         {
             var centerLabel = new GUIStyle
             {
                 alignment = TextAnchor.UpperCenter,
-                normal = {textColor = Color.white}
+                normal = { textColor = Color.white }
             };
             var titleStyle = new GUIStyle(centerLabel)
             {
                 fontSize = 12,
                 alignment = TextAnchor.MiddleCenter
             };
-            GUI.Label(new Rect(0, 0, WindowWidth, 20), "HP/Armor Adjustment", titleStyle);
+
+            GUI.Label(new Rect(0, ContentTop + line * entryHeight, WindowWidth, 20),
+                "Parts to Adjust",
+                titleStyle);
         }
 
-        private void AddToolbarButton()
+        private void AllParts(float line)
         {
-            string textureDir = "DCK_FutureTech/Plugin/";
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
 
-            if (!HasAddedButton)
+            if (allParts)
             {
-                Texture buttonTexture = GameDatabase.Instance.GetTexture(textureDir + "DCK_FT", false); //texture to use for the button
-                ApplicationLauncher.Instance.AddModApplication(EnableGui, DisableGui, Dummy, Dummy, Dummy, Dummy,
-                    ApplicationLauncher.AppScenes.ALWAYS, buttonTexture);
-                HasAddedButton = true;
+                if (GUI.Button(saveRect, "All Parts   {On}"))
+                    allParts = false;
+            }
+            else
+            {
+                if (GUI.Button(saveRect, "All Parts  {Off}"))
+                    allParts = true;
+
             }
         }
 
-        private void EnableGui()
+        private void moduleCommand(float line)
         {
-            GuiEnabled = true;
-            Debug.Log("[DCK_FutureTech]: Showing HP/Armor GUI");
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+
+            if (command)
+            {
+                if (GUI.Button(saveRect, "Command   {On}"))
+                    command = false;
+            }
+            else
+            {
+                if (GUI.Button(saveRect, "Command  {Off}"))
+                    command = true;
+            }
         }
 
-        private void DisableGui()
+        private void moduleLiftingSurface(float line)
         {
-            GuiEnabled = false;
-            Debug.Log("[DCK_FutureTech]: Hiding HP/Armor GUI");
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+
+            if (MLS)
+            {
+                if (GUI.Button(saveRect, "Wings    {On}"))
+                    MLS = false;
+            }
+            else
+            {
+                if (GUI.Button(saveRect, "Wings    {Off}"))
+                    MLS = true;
+            }
         }
+
+        private void moduleControlSurface(float line)
+        {
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+
+            if (MCS)
+            {
+                if (GUI.Button(saveRect, "Ctrl Surf   {On}"))
+                    MCS = false;
+            }
+            else
+            {
+                if (GUI.Button(saveRect, "Ctrl Surf  {Off}"))
+                    MCS = true;
+            }
+        }
+
+        private void FuelTanks(float line)
+        {
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+
+            if (fuelTank)
+            {
+                if (GUI.Button(saveRect, "Fuel Tank {On}"))
+                    fuelTank = false;
+            }
+            else
+            {
+                if (GUI.Button(saveRect, "Fuel Tank {Off}"))
+                    fuelTank = true;
+            }
+        }
+
+        private void Structural(float line)
+        {
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+
+            if (structural)
+            {
+                if (GUI.Button(saveRect, "Structural {On}"))
+                    structural = false;
+            }
+            else
+            {
+                if (GUI.Button(saveRect, "Structural{Off}"))
+                    structural = true;
+            }
+        }
+
+        private void Engines(float line)
+        {
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+
+            if (engines)
+            {
+                if (GUI.Button(saveRect, "Engines  {On}"))
+                    engines = false;
+            }
+            else
+            {
+                if (GUI.Button(saveRect, "Engines {Off}"))
+                    engines = true;
+            }
+        }
+
+        private void ShipHull(float line)
+        {
+            var saveRect = new Rect(LeftIndent * 1.5f, ContentTop + line * entryHeight, contentWidth * 0.9f, entryHeight);
+
+            if (shipHull)
+            {
+                if (GUI.Button(saveRect, "Ship Hull  {On}"))
+                    shipHull = false;
+            }
+            else
+            {
+                if (GUI.Button(saveRect, "Ship Hull {Off}"))
+                    shipHull = true;
+            }
+        }
+
+        #endregion
 
         private void Dummy()
         {
-        }
-
-        private void GameUiEnable()
-        {
-            _gameUiToggle = true;
-        }
-
-        private void GameUiDisable()
-        {
-            _gameUiToggle = false;
         }
     }
 }

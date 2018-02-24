@@ -75,6 +75,7 @@
     <Compile Include="DCK_FutureTech.cs" />
     <Compile Include="Modules\ModuleDCKNanites.cs" />
     <Compile Include="Modules\ModuleDCKNanoTech.cs" />
+    <Compile Include="Modules\ModuleDCKPartID.cs" />
     <Compile Include="Modules\ModuleDCKStealth.cs" />
     <Compile Include="Modules\ModuleDCKACS.cs" />
     <Compile Include="Modules\ModuleDCKShields.cs" />
