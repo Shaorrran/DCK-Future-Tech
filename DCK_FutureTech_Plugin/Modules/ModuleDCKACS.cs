@@ -41,16 +41,10 @@ namespace DCK_FutureTech
 
         [KSPField(isPersistant = true, guiActiveEditor = true, guiActive = true, guiName = "Auto Deploy"),
          UI_Toggle(controlEnabled = true, scene = UI_Scene.All, disabledText = "Off", enabledText = "On")]
-        public bool autoDeploy = false;
+        public bool autoDeploy = true;
 
-        [KSPField(isPersistant = true, guiActive = false, guiActiveEditor = false),
-         UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0.0f, maxValue = 1.0f, stepIncrement = 0.05f)]
-        public float maxfade = 0.1f; // invisible:0 to uncloaked:1
-
-        [KSPField(isPersistant = false, guiActive = false, guiActiveEditor = false, guiName = "Surface Area", guiFormat = "F1")]
+        private float maxfade = 0.1f; // invisible:0 to uncloaked:1
         private float surfaceAreaToCloak = 0.0f;
-
-        [KSPField(isPersistant = false, guiActive = false, guiActiveEditor = false, guiName = "EC Used", guiFormat = "F1")]
         private float RequiredEC = 0.0f;
 
         [KSPField(isPersistant = true, guiActiveEditor = false, guiActive = false)]

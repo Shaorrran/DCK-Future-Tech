@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using BDArmory;
-using BDArmory.Core;
 using BDArmory.Core.Module;
 using System.Collections;
 using UnityEngine;
@@ -14,11 +13,11 @@ namespace DCK_FutureTech
 
         [KSPField(isPersistant = true, guiActiveEditor = true, guiActive = true, guiName = "Auto Deploy"),
          UI_Toggle(controlEnabled = true, scene = UI_Scene.All, disabledText = "Off", enabledText = "On")]
-        public bool autoDeploy = false;
+        public bool autoDeploy = true;
 
-        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "Field Intensity"),
-         UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0f, maxValue = 10f, stepIncrement = 1f)]
-        public float intensity = 1f; 
+        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "Field Intensity %"),
+         UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0f, maxValue = 100f, stepIncrement = 1f)]
+        public float intensity = 50f;
 
         private bool targeted;
         private bool hpAvailable;
@@ -27,8 +26,9 @@ namespace DCK_FutureTech
         private bool resourceAvailable;
         private bool resourceCheck;
         private bool shieldDeployable;
-        private float armorMax;
         private float RequiredEC = 0.0f;
+        private float surfaceArea = 0.0f;
+        private float areaExponet = 0.5f;
 
         private ModuleActiveRadiator shieldState;
         private ModuleDeployableRadiator shieldCheck;
@@ -43,7 +43,7 @@ namespace DCK_FutureTech
                 shieldCheck = ShieldControl();
                 hpTracker = GetHP();
                 CheckShieldState();
-                CheckArmorMax();
+                calcSurfaceArea();
             }
         }
 
@@ -140,6 +140,14 @@ namespace DCK_FutureTech
             }
         }
 
+        private void calcSurfaceArea()
+        {
+            if (part != null)
+            {
+                surfaceArea = (float)(surfaceArea + part.skinExposedArea);
+            }
+        }
+
         private HitpointTracker GetHP()
         {
             HitpointTracker hp = null;
@@ -179,10 +187,10 @@ namespace DCK_FutureTech
             float HPtoAdd = 0;
             if (hpTracker.Hitpoints < hpTracker.maxHitPoints * 0.95f)
             {
-                RequiredEC = Time.deltaTime * intensity;
+                RequiredEC = Time.deltaTime * intensity / 100;
                 float AcquiredEC = part.RequestResource("ElectricCharge", RequiredEC);
 
-                HPtoAdd = (RequiredEC * 10) * intensity;
+                HPtoAdd = AcquiredEC * intensity / 10;
 
                 if (HPtoAdd > 0)
                 {
@@ -191,31 +199,11 @@ namespace DCK_FutureTech
             }
         }
 
-        private void GenerateArmor()
-        {
-            float ArmorToAdd = 0;
-            if (hpTracker.Armor < armorMax * 0.95f)
-            {
-                RequiredEC = Time.deltaTime * intensity;
-                float AcquiredEC = part.RequestResource("ElectricCharge", RequiredEC);
-
-                ArmorToAdd = RequiredEC * intensity;
-
-                if (ArmorToAdd > 0)
-                {
-                    hpTracker.Armor += ArmorToAdd;
-                }
-            }
-        }
-
-        private void CheckArmorMax()
-        {
-            armorMax = hpTracker.Armor;
-        }
-
         private void CheckShieldHP()
         {
-            if (hpTracker.Hitpoints < hpTracker.maxHitPoints * 0.15)
+            hpTracker = GetHP();
+
+            if (hpTracker.Hitpoints < hpTracker.maxHitPoints * 0.05)
             {
                 hpAvailable = false;
             }
@@ -313,13 +301,17 @@ namespace DCK_FutureTech
                 }
                 DeployShields();
             }
-            else if (vessel.isActiveVessel && !resourceCheck)
+            else 
             {
-                ScreenMsg("EC too low ... Shields unable to deploy");
-            }
-            else if (vessel.isActiveVessel && !shieldDeployable)
-            {
-                ScreenMsg("Shields Regenerating .. Please Stand By");
+                if (vessel.isActiveVessel && !resourceCheck)
+                {
+                    ScreenMsg("EC too low ... Shields unable to deploy");
+                }
+
+                if (vessel.isActiveVessel && !shieldDeployable)
+                {
+                    ScreenMsg("Shields Regenerating .. Please Stand By");
+                }
             }
         }
 

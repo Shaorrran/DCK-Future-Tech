@@ -72,8 +72,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modules\ModuleDCKNanites.cs" />
+    <Compile Include="DCKPartCatalog.cs" />
+    <Compile Include="GPS_Editor.cs" />
+    <Compile Include="Modules\ModuleHammerOfDawn.cs" />
     <Compile Include="Modules\ModuleDCKNanoTech.cs" />
+    <Compile Include="Modules\ModuleDCKGPSSat.cs" />
+    <Compile Include="Modules\ModuleFriendOrFoe.cs" />
+    <Compile Include="Modules\ModuleMissileDetect.cs" />
     <Compile Include="Modules\ModuleDCKStealth.cs" />
     <Compile Include="Modules\ModuleDCKACS.cs" />
     <Compile Include="Modules\ModuleDCKShields.cs" />
