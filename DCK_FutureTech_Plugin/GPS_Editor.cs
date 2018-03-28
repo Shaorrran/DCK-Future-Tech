@@ -176,36 +176,71 @@ namespace DCK_FutureTech
                 team = wmPart.team;
             }
 
+            var satCount = 0;
+            var HoDCount = 0;
+
             foreach (Vessel v in FlightGlobals.Vessels)
             {
-                var satCount = 0;
-                var HoDCount = 0;
-
-                List<ModuleDCKGPSSat> gpsParts = new List<ModuleDCKGPSSat>(200);
-                foreach (Part p in v.Parts)
+                if (v.isActiveVessel)
                 {
-                    gpsParts.AddRange(p.FindModulesImplementing<ModuleDCKGPSSat>());
-                }
-                foreach (ModuleDCKGPSSat gpsPart in gpsParts)
-                {
-                    satCount += 1;
-                    if (gpsPart.myTeam == team && satCount == 1)
+                    List<ModuleDCKGPSSat> GPSParts = new List<ModuleDCKGPSSat>(200);
+                    foreach (Part p in v.Parts)
                     {
-                        gpsPart.scan = true;
+                        GPSParts.AddRange(p.FindModulesImplementing<ModuleDCKGPSSat>());
+                    }
+                    foreach (ModuleDCKGPSSat GPSPart in GPSParts)
+                    {
+                        satCount += 1;
+                        if (GPSPart.myTeam == team && satCount == 1)
+                        {
+                            GPSPart.scan = true;
+                        }
+                    }
+
+                    List<ModuleHammerOfDawn> HammerParts = new List<ModuleHammerOfDawn>(200);
+                    foreach (Part p in v.Parts)
+                    {
+                        HammerParts.AddRange(p.FindModulesImplementing<ModuleHammerOfDawn>());
+                    }
+                    foreach (ModuleHammerOfDawn HammerPart in HammerParts)
+                    {
+                        HoDCount += 1;
+                        if (HammerPart.myTeam == team && HoDCount == 1)
+                        {
+                            HammerPart.scan = true;
+                        }
                     }
                 }
-
-                List<ModuleHammerOfDawn> HoDParts = new List<ModuleHammerOfDawn>(200);
-                foreach (Part p in v.Parts)
+                else
                 {
-                    HoDParts.AddRange(p.FindModulesImplementing<ModuleHammerOfDawn>());
-                }
-                foreach (ModuleHammerOfDawn HoDPart in HoDParts)
-                {
-                    HoDCount += 1;
-                    if (HoDPart.myTeam == team && HoDCount == 1)
+                    List<ModuleDCKGPSSat> gpsParts = new List<ModuleDCKGPSSat>(200);
+                    foreach (Part p in v.Parts)
                     {
-                        HoDPart.scan = true;
+                        gpsParts.AddRange(p.FindModulesImplementing<ModuleDCKGPSSat>());
+                    }
+                    foreach (ModuleDCKGPSSat gpsPart in gpsParts)
+                    {
+                        satCount += 1;
+                        if (gpsPart.myTeam == team && satCount == 1)
+                        {
+                            gpsPart.scan = true;
+                        }
+                        else
+                        {
+                            List<ModuleHammerOfDawn> HoDParts = new List<ModuleHammerOfDawn>(200);
+                            foreach (Part p in v.Parts)
+                            {
+                                HoDParts.AddRange(p.FindModulesImplementing<ModuleHammerOfDawn>());
+                            }
+                            foreach (ModuleHammerOfDawn HoDPart in HoDParts)
+                            {
+                                HoDCount += 1;
+                                if (HoDPart.myTeam == team && satCount == 0 && HoDCount == 1)
+                                {
+                                    HoDPart.scan = true;
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -228,7 +263,6 @@ namespace DCK_FutureTech
                 _longitude = _longitude_;
                 _altitude = _altitude_;
             }
-
         }
 
         private Vector3 getTargetCoords

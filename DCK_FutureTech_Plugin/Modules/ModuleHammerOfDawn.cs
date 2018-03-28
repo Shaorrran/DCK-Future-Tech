@@ -101,23 +101,15 @@ namespace DCK_FutureTech
                 {
                     StartCoroutine(TargetGPS());
                 }
-                else
-                {
-                    lockTarget = false;
-                }
 
                 if (fireLaser && targetLocked)
                 {
-                    if (!firing)
-                    {
-                        StartCoroutine(FireLaser());
-                    }
+                    StartCoroutine(FireLaser());
                 }
 
-                if (scan && !pauseRoutine && !scanning)
+                if (scan && !pauseRoutine && !scanning && !firing)
                 {
                     GetSatInfo();
-                    targetLocked = false;
 
                     if (vessel.atmDensity < 0.000005f)
                     {
@@ -130,6 +122,7 @@ namespace DCK_FutureTech
                         ScreenMsg2("Current Atmospheric Density too high");
                         ScreenMsg2("Reduce Density by : " + atm + " atm");
                         StartCoroutine(PauseRoutine());
+                        scan = false;
                     }
                 }
             }
@@ -158,15 +151,17 @@ namespace DCK_FutureTech
         {
             ScreenMsg2("BRINGING DOWN THE HAMMER");
             firing = true;
+            laser.EnableWeapon();
             laser.AGFireToggle(new KSPActionParam(KSPActionGroup.None, KSPActionType.Activate));
             yield return new WaitForSeconds(6);
             laser.AGFireToggle(new KSPActionParam(KSPActionGroup.None, KSPActionType.Deactivate));
             fireLaser = false;
+            laser.DisableWeapon();
+            wm.guardMode = false;
             scanning = false;
             firing = false;
             targetLocked = false;
         }
-
         private void GetSatInfo()
         {
             var _satLat = vessel.latitude;
@@ -280,34 +275,13 @@ namespace DCK_FutureTech
             scanning = false;
         }
 
-        void Target()
-        {
-            camera.groundStabilized = true;
-            Vector3d newGTP = VectorUtils.WorldPositionToGeoCoords(wm.designatedGPSCoords, vessel.mainBody);
-            if (newGTP != Vector3d.zero)
-            {
-                camera.bodyRelativeGTP = newGTP;
-            }
-            targetLocked = true;
-            StartCoroutine(StabilizeCamera());
-        }
-
-        IEnumerator StabilizeCamera()
-        {
-            yield return new WaitForFixedUpdate();
-            yield return new WaitForEndOfFrame();
-            if (!camera.gimbalLimitReached)
-            {
-                Target();
-            }
-        }
-
         IEnumerator PauseRoutine()
         {
             pauseRoutine = true;
             scan = false;
             yield return new WaitForSeconds(2);
             pauseRoutine = false;
+            scanning = false;
         }
 
         private Vector3 getTargetCoords
