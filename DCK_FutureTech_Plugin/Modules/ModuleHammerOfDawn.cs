@@ -12,16 +12,12 @@ namespace DCK_FutureTech
     public class ModuleHammerOfDawn : PartModule
     {
 
-        [KSPField(isPersistant = true, guiActiveEditor = true, guiActive = true, guiName = "GPS - Scan For Targets"),
-         UI_Toggle(controlEnabled = true, scene = UI_Scene.Flight, disabledText = "", enabledText = "SCANNING")]
-        public bool scan = false;
-
         [KSPField(isPersistant = true, guiActiveEditor = true, guiActive = true, guiName = "Lock on Target"),
          UI_Toggle(controlEnabled = true, scene = UI_Scene.Flight, disabledText = "Off", enabledText = "On")]
         public bool lockTarget = false;
 
-        [KSPField(isPersistant = true, guiActiveEditor = true, guiActive = true, guiName = "HAMMER OF DAWN"),
-         UI_Toggle(controlEnabled = true, scene = UI_Scene.Flight, disabledText = "FIRE", enabledText = "FIRING")]
+        [KSPField(isPersistant = true, guiActiveEditor = true, guiActive = true, guiName = "BRING DOWN THE HAMMER"),
+         UI_Toggle(controlEnabled = true, scene = UI_Scene.Flight, disabledText = "FIRE", enabledText = "HAMMERING")]
         public bool fireLaser = false;
 
         [KSPField(isPersistant = true)]
@@ -99,104 +95,92 @@ namespace DCK_FutureTech
             {
                 if (lockTarget && !targetLocked && !scanning)
                 {
-                    StartCoroutine(TargetGPS());
+                    LockTarget();
                 }
 
                 if (fireLaser && targetLocked)
                 {
-                    StartCoroutine(FireLaser());
-                }
-
-                if (scan && !pauseRoutine && !scanning && !firing)
-                {
-                    GetSatInfo();
-
-                    if (vessel.atmDensity < 0.000005f)
-                    {
-                        StartCoroutine(GPSRoutine());
-                    }
-
-                    if (vessel.atmDensity > 0.000005f)
-                    {
-                        var atm = vessel.atmDensity - 0.000005;
-                        ScreenMsg2("Current Atmospheric Density too high");
-                        ScreenMsg2("Reduce Density by : " + atm + " atm");
-                        StartCoroutine(PauseRoutine());
-                        scan = false;
-                    }
+                    Fire();
                 }
             }
+        }
+
+        public void Fire()
+        {
+            StartCoroutine(FireLaser());
+        }
+
+        public void LockTarget()
+        {
+            StartCoroutine(TargetGPS());
         }
 
         IEnumerator TargetGPS()
         {
             scanning = true;
+            myTeam = wm.team;
+            camera.EnableCamera();
+
+            List<MissileFire> wmParts = new List<MissileFire>(200);
+            foreach (Part p in FlightGlobals.ActiveVessel.Parts)
+            {
+                wmParts.AddRange(p.FindModulesImplementing<MissileFire>());
+            }
+            foreach (MissileFire wmPart in wmParts)
+            {
+                var getTarget = wmPart.designatedGPSCoords;
+                var _latitude_ = getTarget.x;
+                var _longitude_ = getTarget.y;
+                var _altitude_ = getTarget.z;
+                _latitude = _latitude_;
+                _longitude = _longitude_;
+                _altitude = _altitude_;
+            }
+
             if (getTargetCoords != Vector3.zero)
             {
-                camera.StartCoroutine(camera.PointToPositionRoutine(VectorUtils.GetWorldSurfacePostion(getTargetCoords, vessel.mainBody)));
-                yield return new WaitForSeconds(2);
                 targetLocked = true;
+                camera.StartCoroutine(camera.PointToPositionRoutine(VectorUtils.GetWorldSurfacePostion(getTargetCoords, vessel.mainBody)));
+                yield return new WaitForSeconds(1);
                 ScreenMsg2("Hammer of Dawn Locked on Target");
+                camera.currentFovIndex = 3;
             }
             else
             {
-                ScreenMsg2("No GPS Targets to Lock .....");
-                lockTarget = false;
+                ScreenMsg2("No GPS Targets to Lock");
                 targetLocked = false;
+                yield return new WaitForSeconds(1);
+                lockTarget = false;
             }
             scanning = false;
         }
 
         IEnumerator FireLaser()
         {
-            ScreenMsg2("BRINGING DOWN THE HAMMER");
-            firing = true;
-            laser.EnableWeapon();
-            laser.AGFireToggle(new KSPActionParam(KSPActionGroup.None, KSPActionType.Activate));
-            yield return new WaitForSeconds(6);
-            laser.AGFireToggle(new KSPActionParam(KSPActionGroup.None, KSPActionType.Deactivate));
-            fireLaser = false;
-            laser.DisableWeapon();
-            wm.guardMode = false;
-            scanning = false;
-            firing = false;
-            targetLocked = false;
-        }
-        private void GetSatInfo()
-        {
-            var _satLat = vessel.latitude;
-            var _satLong = vessel.longitude;
-            SatAlt = vessel.altitude;
-
-            if (_satLat <= 0)
+            if (targetLocked)
             {
-                SatLat = _satLat + 360;
+                ScreenMsg2("BRINGING DOWN THE HAMMER");
+                yield return new WaitForSeconds(0.7f);
+                firing = true;
+                laser.EnableWeapon();
+                laser.AGFireToggle(new KSPActionParam(KSPActionGroup.None, KSPActionType.Activate));
+                yield return new WaitForSeconds(5);
+                laser.AGFireToggle(new KSPActionParam(KSPActionGroup.None, KSPActionType.Deactivate));
+                fireLaser = false;
+                laser.DisableWeapon();
+                firing = false;
+                lockTarget = false;
+                targetLocked = false;
             }
             else
             {
-                SatLat = _satLat;
+                ScreenMsg2("No GPS Targets Locked");
             }
-
-            if (SatLong <= 0)
-            {
-                SatLong = _satLong + 360;
-            }
-            else
-            {
-                SatLong = _satLong;
-            }
-
-            radius = vessel.mainBody.Radius;
-            circumference = 3.14 * radius * radius;
-            distPerDeg = circumference / 360;
-            myTeam = wm.team;
-            ScreenMsg3("GPS Sat Altitude : " + SatAlt);
         }
 
         private void Setup()
         {
             myTeam = wm.team;
-            wm.guardMode = false;
             wm.guardRange = 200000;
             wm.gunRange = 200000;
             camera.maxRayDistance = 200000;
@@ -217,71 +201,6 @@ namespace DCK_FutureTech
         private void ScreenMsg3(string msg)
         {
             ScreenMessages.PostScreenMessage(new ScreenMessage(msg, 8, ScreenMessageStyle.UPPER_LEFT));
-        }
-
-        IEnumerator GPSRoutine()
-        {
-            scanning = true;
-            targetCount = 0;
-
-            ScreenMsg("Initializing Scan ......");
-            yield return new WaitForSeconds(1.5f);
-            ScreenMsg("Initializing Scan ......");
-            yield return new WaitForSeconds(1.5f);
-            ScreenMsg("Scanning in Progress ......");
-            yield return new WaitForSeconds(1.5f);
-            ScreenMsg("Scanning in Progress ......");
-            yield return new WaitForSeconds(1.5f);
-            ScreenMsg("Scanning in Progress ......");
-            yield return new WaitForSeconds(1.5f);
-
-            foreach (Vessel v in FlightGlobals.Vessels)
-            {
-                if (v.LandedOrSplashed && !v.HoldPhysics)
-                {
-                    List<MissileFire> targets = new List<MissileFire>(200);
-                    foreach (Part t in v.Parts)
-                    {
-                        targets.AddRange(t.FindModulesImplementing<MissileFire>());
-                    }
-                    foreach (MissileFire target in targets)
-                    {
-                        if (myTeam != target.team)
-                        {
-                            _altitude = v.altitude;
-                            _latitude = v.latitude;
-                            _longitude = v.longitude;
-
-                            if (this.vessel.isActiveVessel && targetCount == 0)
-                            {
-                                StartCoroutine(camera.PointToPositionRoutine(VectorUtils.GetWorldSurfacePostion(getTargetCoords, vessel.mainBody)));
-                                ScreenMsg2("Locking onto " + v.vesselName);
-                            }
-
-                            targetCount += 1;
-                            ScreenMsg2("Retrieving GPS Coords for " + v.vesselName);
-                            yield return new WaitForSeconds(1.5f);
-                            BDATargetManager.GPSTargets[BDATargetManager.BoolToTeam(myTeam)].Add(new GPSTargetInfo(getTargetCoords, v.vesselName));
-                            ScreenMsg2(v.vesselName + " added to GPS Database");
-                            yield return new WaitForSeconds(1.5f);
-
-                        }
-                    }
-                }
-            }
-            yield return new WaitForSeconds(1.5f);
-            ScreenMsg2("Scan Complete ... " + targetCount + " Targets added to GPS Database");
-            scan = false;
-            scanning = false;
-        }
-
-        IEnumerator PauseRoutine()
-        {
-            pauseRoutine = true;
-            scan = false;
-            yield return new WaitForSeconds(2);
-            pauseRoutine = false;
-            scanning = false;
         }
 
         private Vector3 getTargetCoords

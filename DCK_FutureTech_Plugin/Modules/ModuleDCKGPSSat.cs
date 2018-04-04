@@ -16,10 +16,6 @@ namespace DCK_FutureTech
          UI_Toggle(controlEnabled = true, scene = UI_Scene.Flight, disabledText = "", enabledText = "SCANNING")]
         public bool scan = false;
 
-        [KSPField(isPersistant = true, guiActiveEditor = true, guiActive = true, guiName = "Lock Target"),
-         UI_Toggle(controlEnabled = true, scene = UI_Scene.Flight, disabledText = "Off", enabledText = "On")]
-        public bool lockTarget = false;
-
         [KSPField(isPersistant = true)]
         public bool myTeam = false;
 
@@ -45,30 +41,8 @@ namespace DCK_FutureTech
 
         private float targetCount = 0;
 
-        private ModuleTargetingCamera camera;
-        private ModuleTargetingCamera GetCamera()
-        {
-            ModuleTargetingCamera c = null;
-
-            c = part.FindModuleImplementing<ModuleTargetingCamera>();
-
-            return c;
-        }
-
-        private MissileFire wm;
-        private MissileFire GetWM()
-        {
-            MissileFire w = null;
-
-            w = part.FindModuleImplementing<MissileFire>();
-
-            return w;
-        }
-
         public override void OnStart(StartState state)
         {
-            wm = GetWM();
-            camera = GetCamera();
             Setup();
             base.OnStart(state);
         }
@@ -78,15 +52,9 @@ namespace DCK_FutureTech
         {
             if (HighLogic.LoadedSceneIsFlight)
             {
-                if (!lockTarget)
-                {
-                    StopCoroutine("StabilizeCamera");
-                }
-
                 if (scan && !pauseRoutine && !scanning)
                 {
                     GetSatInfo();
-                    camera.groundStabilized = false;
 
                     if (vessel.atmDensity < 0.000005f)
                     {
@@ -104,26 +72,21 @@ namespace DCK_FutureTech
             }
         }
 
-        void Target()
-        {
-            camera = GetCamera();
-
-            camera.groundStabilized = true;
-            Vector3d newGTP = VectorUtils.WorldPositionToGeoCoords(getTargetCoords, vessel.mainBody);
-            if (newGTP != Vector3d.zero)
-            {
-                camera.bodyRelativeGTP = newGTP;
-            }
-            StartCoroutine(StabilizeCamera());
-        }
-
 
         private void Setup()
         {
-            myTeam = wm.team;
-            wm.guardRange = 200000;
-            wm.gunRange = 200000;
-            camera.maxRayDistance = 200000;
+            List<MissileFire> wmParts = new List<MissileFire>(200);
+            foreach (Part p in vessel.Parts)
+            {
+                wmParts.AddRange(p.FindModulesImplementing<MissileFire>());
+            }
+            foreach (MissileFire wmPart in wmParts)
+            {
+                if (wmPart != null)
+                {
+                    myTeam = wmPart.team;
+                }
+            }
         }
 
         private void GetSatInfo()
@@ -149,12 +112,12 @@ namespace DCK_FutureTech
             {
                 SatLong = _satLong;
             }
-
+            Setup();
             radius = vessel.mainBody.Radius;
             circumference = 3.14 * radius * radius;
             distPerDeg = circumference / 360;
-            myTeam = wm.team;
             ScreenMsg3("GPS Sat Altitude : " + SatAlt);
+
         }
 
         private Vector3 getTargetCoords
@@ -201,6 +164,7 @@ namespace DCK_FutureTech
 
         IEnumerator GPSRoutine()
         {
+            GetSatInfo();
             scanning = true;
             targetCount = 0;
 
@@ -232,12 +196,6 @@ namespace DCK_FutureTech
                             _latitude = v.latitude;
                             _longitude = v.longitude;
 
-                            if (this.vessel.isActiveVessel && targetCount == 0)
-                            {
-                                StartCoroutine(camera.PointToPositionRoutine(VectorUtils.GetWorldSurfacePostion(getTargetCoords, vessel.mainBody)));
-                                ScreenMsg2("Locking onto " + v.vesselName);
-                            }
-
                             targetCount += 1;
                             ScreenMsg2("Retrieving GPS Coords for " + v.vesselName);
                             yield return new WaitForSeconds(1.5f);
@@ -253,16 +211,6 @@ namespace DCK_FutureTech
             ScreenMsg2("Scan Complete ... " + targetCount + " Targets added to GPS Database");
             scan = false;
             scanning = false;
-        }
-
-        IEnumerator StabilizeCamera()
-        {
-            yield return new WaitForFixedUpdate();
-            yield return new WaitForEndOfFrame();
-            if (!camera.gimbalLimitReached)
-            {
-                Target();
-            }
         }
 
         IEnumerator PauseRoutine()

@@ -17,11 +17,11 @@ namespace DCK_FutureTech
 
         [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "Field Intensity %"),
          UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0f, maxValue = 100f, stepIncrement = 1f)]
-        public float intensity = 50f;
+        public float intensity = 100;
 
         private bool targeted;
         private bool hpAvailable;
-        private bool shieldsDeployed;
+        public bool shieldsDeployed;
         private bool coolDown = false;
         private bool resourceAvailable;
         private bool resourceCheck;
@@ -47,14 +47,20 @@ namespace DCK_FutureTech
             }
         }
 
-        public void LateUpdate()
+        public void Update()
         {
             if (HighLogic.LoadedSceneIsFlight)
             {
                 CheckShieldHP();
                 CheckShieldState();
                 CheckEC();
+            }
+        }
 
+        public void LateUpdate()
+        {
+            if (HighLogic.LoadedSceneIsFlight)
+            {
                 if (shieldsDeployed)
                 {
                     if (!resourceAvailable)
@@ -190,7 +196,7 @@ namespace DCK_FutureTech
                 RequiredEC = Time.deltaTime * intensity / 100;
                 float AcquiredEC = part.RequestResource("ElectricCharge", RequiredEC);
 
-                HPtoAdd = AcquiredEC * intensity / 10;
+                HPtoAdd = AcquiredEC * intensity;
 
                 if (HPtoAdd > 0)
                 {

@@ -54,7 +54,7 @@ namespace DCK_FutureTech
             StartCoroutine(VesselRoutine());
             double aircraft = 0;
             double boat = 0;
-            double sub = 0;
+//            double sub = 0;
             double ground = 0;
             double cutoff = vessel.altitude * 0.67;
 
@@ -95,7 +95,7 @@ namespace DCK_FutureTech
                         }
                     }
                 }
-
+                /*
                 if (v.Splashed && v.altitude <= -25 && !v.HoldPhysics)
                 {
                     List<MissileFire> wmParts = new List<MissileFire>(200);
@@ -113,7 +113,7 @@ namespace DCK_FutureTech
                         }
                     }
                 }
-
+                */
                 if (v.Landed && !v.HoldPhysics)
                 {
                     List<MissileFire> wmParts = new List<MissileFire>(200);
@@ -138,8 +138,8 @@ namespace DCK_FutureTech
             ScreenMsg3(ground + " Ground Contacts Found");
             yield return new WaitForSeconds(2);
             ScreenMsg3(boat + " Surface Contacts Found");
-            yield return new WaitForSeconds(2);
-            ScreenMsg3(ground + " Submarine Contacts Found");
+//            yield return new WaitForSeconds(2);
+//            ScreenMsg3(ground + " Submarine Contacts Found");
         }
 
         private void ScreenMsg(string msg)

@@ -404,7 +404,23 @@ namespace DCK_FutureTech
         /// Cloak code
         /// </summary>
         /// 
-        private void engageCloak()
+
+        public void ToggleACS()
+        {
+            if (cloakOn)
+            {
+                cloakOn = false;
+                disengageCloak();
+            }
+
+            if (!cloakOn)
+            {
+                cloakOn = true;
+                engageCloak();
+            }
+        }
+
+        public void engageCloak()
         {
             if (resourceAvailable)
             {
@@ -425,7 +441,7 @@ namespace DCK_FutureTech
             }
         }
 
-        private void disengageCloak()
+        public void disengageCloak()
         {
             if (cloakOn)
             {
@@ -451,7 +467,7 @@ namespace DCK_FutureTech
             recalcCloak = true;
         }
 
-        protected void UpdateCloakField(BaseField field, object oldValueObj)
+        public void UpdateCloakField(BaseField field, object oldValueObj)
         {
             // Update in case its been changed
             calcFadeTime();

@@ -73,7 +73,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DCKPartCatalog.cs" />
-    <Compile Include="GPS_Editor.cs" />
+    <Compile Include="DCK_FutureTech.cs" />
+    <Compile Include="HP_Armor_Editor.cs" />
+    <Compile Include="Modules\ModuleHullIntegrity.cs" />
     <Compile Include="Modules\ModuleHammerOfDawn.cs" />
     <Compile Include="Modules\ModuleDCKNanoTech.cs" />
     <Compile Include="Modules\ModuleDCKGPSSat.cs" />

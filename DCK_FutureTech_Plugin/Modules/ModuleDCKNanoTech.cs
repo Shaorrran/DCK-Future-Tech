@@ -46,7 +46,8 @@ namespace DCK_FutureTech
                 if (autoRepair)
                 {
                     GenerateHP();
-                    CheckGLUE();                }
+                    CheckGLUE();
+                }
             }
         }
 
@@ -68,9 +69,9 @@ namespace DCK_FutureTech
                         if (nanoPart.Hitpoints < nanoPart.maxHitPoints)
                         {
                             float HPtoAdd = 0.0f;
-                            RequiredGLUE = Time.deltaTime * naniteMass;
+                            RequiredGLUE = Time.deltaTime * naniteMass / 10;
                             float glue = part.RequestResource("GLUE", RequiredGLUE);
-                            HPtoAdd = (glue * 10) * naniteMass;
+                            HPtoAdd = (glue * 10) * naniteMass * 10;
 
                             if (HPtoAdd > 0)
                             {
