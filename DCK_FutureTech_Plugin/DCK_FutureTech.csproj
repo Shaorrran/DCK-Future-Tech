@@ -72,9 +72,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DCKPartCatalog.cs" />
-    <Compile Include="DCK_FutureTech.cs" />
-    <Compile Include="HP_Armor_Editor.cs" />
+    <Compile Include="Tools\DCKFTtextureswitch2.cs" />
+    <Compile Include="Tools\DCKFTtools.cs" />
+    <Compile Include="Tools\DCK_FT_Paintshop.cs" />
+    <Compile Include="Tools\DCKPartCatalog.cs" />
+    <Compile Include="Tools\DCK_FutureTech.cs" />
     <Compile Include="Modules\ModuleHullIntegrity.cs" />
     <Compile Include="Modules\ModuleHammerOfDawn.cs" />
     <Compile Include="Modules\ModuleDCKNanoTech.cs" />

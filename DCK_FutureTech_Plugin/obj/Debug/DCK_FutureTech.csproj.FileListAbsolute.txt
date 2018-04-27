@@ -1,10 +1,21 @@
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.csprojResolveAssemblyReference.cache
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.csproj.CoreCompileInputs.cache
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.dll
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.pdb
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\BDArmory.Core.dll
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\BDArmory.dll
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\KSPAssets.dll
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\System.Core.dll
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\System.dll
-C:\Users\Black Ops\Desktop\MYMODS\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\System.Xml.dll
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK_FutureTech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.csproj.CoreCompileInputs.cache
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK_FutureTech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.dll
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK_FutureTech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.pdb
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK_FutureTech\DCK_FutureTech_Plugin\obj\Debug\BDArmory.Core.dll
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK_FutureTech\DCK_FutureTech_Plugin\obj\Debug\BDArmory.dll
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK_FutureTech\DCK_FutureTech_Plugin\obj\Debug\KSPAssets.dll
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK_FutureTech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.csprojResolveAssemblyReference.cache
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.csprojResolveAssemblyReference.cache
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.csproj.CoreCompileInputs.cache
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.dll
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.pdb
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\BDArmory.Core.dll
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\BDArmory.dll
+C:\Users\Black Ops\Desktop\MODS 1.4\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\KSPAssets.dll
+C:\Users\Black Ops\Desktop\MODS 1.4.3\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.csprojResolveAssemblyReference.cache
+C:\Users\Black Ops\Desktop\MODS 1.4.3\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.csproj.CoreCompileInputs.cache
+C:\Users\Black Ops\Desktop\MODS 1.4.3\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.dll
+C:\Users\Black Ops\Desktop\MODS 1.4.3\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\DCK_FutureTech.pdb
+C:\Users\Black Ops\Desktop\MODS 1.4.3\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\BDArmory.Core.dll
+C:\Users\Black Ops\Desktop\MODS 1.4.3\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\BDArmory.dll
+C:\Users\Black Ops\Desktop\MODS 1.4.3\DCK-Future-Tech\DCK_FutureTech_Plugin\obj\Debug\KSPAssets.dll

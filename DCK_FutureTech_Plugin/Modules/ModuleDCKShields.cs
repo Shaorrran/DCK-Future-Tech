@@ -49,12 +49,9 @@ namespace DCK_FutureTech
 
         public void Update()
         {
-            if (HighLogic.LoadedSceneIsFlight)
-            {
-                CheckShieldHP();
-                CheckShieldState();
-                CheckEC();
-            }
+            CheckShieldHP();
+            CheckShieldState();
+            CheckEC();
         }
 
         public void LateUpdate()
