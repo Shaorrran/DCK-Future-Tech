@@ -1,6 +1,6 @@
 ﻿using BDArmory.Parts;
 using System.Collections.Generic;
-using BDArmory;
+using BDArmory.Modules;
 using UnityEngine;
 using System.Collections;
 

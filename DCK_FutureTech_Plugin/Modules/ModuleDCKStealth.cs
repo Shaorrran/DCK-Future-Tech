@@ -1,4 +1,4 @@
-﻿using BDArmory.Parts;
+﻿using BDArmory.Modules;
 
 namespace DCK_FutureTech
 {

@@ -1,7 +1,5 @@
-﻿using BDArmory.Parts;
-using System.Collections.Generic;
-using BDArmory.UI;
-using BDArmory;
+﻿using System.Collections.Generic;
+using BDArmory.Modules;
 using BDArmory.Misc;
 using UnityEngine;
 using System.Collections;

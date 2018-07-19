@@ -28,8 +28,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BDArmory;
-using BDArmory.Radar;
+using BDArmory.Modules;
 using UnityEngine;
 using System.Collections;
 
@@ -280,12 +279,8 @@ namespace DCK_FutureTech
 
         private void UnderFirecheck()
         {
-            List<MissileFire> wmParts = new List<MissileFire>(200);
-            foreach (Part p in vessel.Parts)
-            {
-                wmParts.AddRange(p.FindModulesImplementing<MissileFire>());
-            }
-            foreach (MissileFire wmPart in wmParts)
+            var wmPart = this.vessel.FindPartModuleImplementing<MissileFire>();
+            if (wmPart !=null)
             {
                 if (wmPart.underAttack)
                 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using BDArmory;
+using BDArmory.Modules;
 using BDArmory.Core.Module;
 using System.Collections;
 using UnityEngine;
@@ -19,6 +19,10 @@ namespace DCK_FutureTech
          UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0f, maxValue = 100f, stepIncrement = 1f)]
         public float intensity = 100;
 
+        [KSPField(isPersistant = true, guiActive = true, guiActiveEditor = true, guiName = "PER SHOT EC DRAIN %"),
+         UI_FloatRange(controlEnabled = true, scene = UI_Scene.All, minValue = 0f, maxValue = 1f, stepIncrement = 0.05f)]
+        public float ecDrain = 0.80f;
+
         private bool targeted;
         private bool hpAvailable;
         public bool shieldsDeployed;
@@ -29,6 +33,7 @@ namespace DCK_FutureTech
         private float RequiredEC = 0.0f;
         private float surfaceArea = 0.0f;
         private float areaExponet = 0.5f;
+        private bool surfaceCalc = true;
 
         private ModuleActiveRadiator shieldState;
         private ModuleDeployableRadiator shieldCheck;
@@ -44,6 +49,8 @@ namespace DCK_FutureTech
                 hpTracker = GetHP();
                 CheckShieldState();
                 calcSurfaceArea();
+                hp = hpTracker.Hitpoints;
+                hpCheck = hp;
             }
         }
 
@@ -139,6 +146,12 @@ namespace DCK_FutureTech
             if (shieldState.IsCooling)
             {
                 shieldsDeployed = true;
+
+                if (surfaceCalc)
+                {
+                    surfaceCalc = false;
+                    surfaceArea = (float)(surfaceArea + part.skinExposedArea);
+                }
             }
             else
             {
@@ -193,7 +206,7 @@ namespace DCK_FutureTech
             float HPtoAdd = 0;
             if (hpTracker.Hitpoints < hpTracker.maxHitPoints * 0.95f)
             {
-                RequiredEC = Time.deltaTime * intensity / 100;
+                RequiredEC = Time.deltaTime * (intensity / 100) * surfaceArea;
                 float AcquiredEC = part.RequestResource("ElectricCharge", RequiredEC);
 
                 HPtoAdd = AcquiredEC * intensity;
@@ -201,13 +214,25 @@ namespace DCK_FutureTech
                 if (HPtoAdd > 0)
                 {
                     hpTracker.Hitpoints += HPtoAdd;
+                    hp = hpTracker.Hitpoints;
+                    hpCheck = hp;
                 }
             }
         }
 
+        private float hp = 0;
+        private float hpCheck = 0;
+
         private void CheckShieldHP()
         {
             hpTracker = GetHP();
+
+            if (hp <= hpCheck)
+            {
+                var depletedEC = (hpCheck - hp) * ecDrain;
+                this.part.RequestResource("ElectricCharge", depletedEC);
+                hpCheck = hp;
+            }
 
             if (hpTracker.Hitpoints < hpTracker.maxHitPoints * 0.05)
             {

@@ -72,6 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\ModuleDCKHKSat.cs" />
     <Compile Include="Tools\DCKFTtextureswitch2.cs" />
     <Compile Include="Tools\DCKFTtools.cs" />
     <Compile Include="Tools\DCK_FT_Paintshop.cs" />

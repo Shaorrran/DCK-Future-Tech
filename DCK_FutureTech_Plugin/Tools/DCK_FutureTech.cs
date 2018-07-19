@@ -1,7 +1,7 @@
 ﻿using System;
 using KSP.UI.Screens;
 using UnityEngine;
-using BDArmory;
+using BDArmory.Modules;
 using BDArmory.UI;
 using BDArmory.Parts;
 using System.Collections.Generic;
@@ -31,6 +31,7 @@ namespace DCK_FutureTech
         private Rect _windowRect;
 
         public string Name = String.Empty;
+        public Guid playerVessel;
 
         private double altitude;
         private double longitude;
@@ -71,15 +72,10 @@ namespace DCK_FutureTech
 
         private void FireHoD()
         {
-            List<MissileFire> wmParts = new List<MissileFire>(200);
-            foreach (Part p in FlightGlobals.ActiveVessel.Parts)
-            {
-                wmParts.AddRange(p.FindModulesImplementing<MissileFire>());
-            }
-            foreach (MissileFire wmPart in wmParts)
-            {
-                team = wmPart.team;
-            }
+            var wmPart = FlightGlobals.ActiveVessel.FindPartModuleImplementing<MissileFire>();
+            team = wmPart.team;
+
+            playerVessel = FlightGlobals.ActiveVessel.id;
 
             var SatCount = 0;
 
@@ -87,38 +83,42 @@ namespace DCK_FutureTech
             {
                 if (!v.HoldPhysics && v.atmDensity <= 0.000005)
                 {
-                    List<ModuleHammerOfDawn> HoDParts = new List<ModuleHammerOfDawn>(200);
-                    foreach (Part p in v.Parts)
+                    var HoD = FlightGlobals.ActiveVessel.FindPartModuleImplementing<ModuleHammerOfDawn>();
+                    if (HoD != null)
                     {
-                        HoDParts.AddRange(p.FindModulesImplementing<ModuleHammerOfDawn>());
-                    }
-                    foreach (ModuleHammerOfDawn HoDPart in HoDParts)
-                    {
-                        if (HoDParts != null)
+                        if (HoD.myTeam == team && SatCount == 0)
                         {
-                            if (HoDPart.myTeam == team && SatCount == 0)
-                            {
-                                SatCount += 1;
-                                HoDPart.Fire();
-                                HoDPart.fireLaser = true;
-                                BDArmorySetup.Instance.showVSGUI = true;
-                                FlightGlobals.ForceSetActiveVessel(v);
-                                FlightInputHandler.ResumeVesselCtrlState(v);
-                            }
+                            SatCount += 1;
+                            playerVessel = FlightGlobals.ActiveVessel.id;
+                            HoD.Fire();
+                            HoD.fireLaser = true;
+                            BDArmorySetup.Instance.showVSGUI = true;
+                            FlightGlobals.ForceSetActiveVessel(v);
+                            FlightInputHandler.ResumeVesselCtrlState(v);
+                            StartCoroutine(FocusSwitchRoutine());
                         }
                     }
                 }
             }
         }
 
+        IEnumerator FocusSwitchRoutine()
+        {
+            yield return new WaitForSeconds(2);
+            foreach (Vessel v in FlightGlobals.Vessels)
+            {
+                if (v.id == playerVessel)
+                {
+                    FlightGlobals.ForceSetActiveVessel(v);
+                    FlightInputHandler.ResumeVesselCtrlState(v);
+                }
+            }
+        }
+
         private void NanoTech()
         {
-            List<ModuleDCKNanoTech> nanoParts = new List<ModuleDCKNanoTech>(200);
-            foreach (Part p in FlightGlobals.ActiveVessel.Parts)
-            {
-                nanoParts.AddRange(p.FindModulesImplementing<ModuleDCKNanoTech>());
-            }
-            foreach (ModuleDCKNanoTech nanoPart in nanoParts)
+            var nanoPart = FlightGlobals.ActiveVessel.FindPartModuleImplementing<ModuleDCKNanoTech>();
+            if (nanoPart != null)
             {
                 if (nanoPart.autoRepair)
                 {
@@ -136,12 +136,8 @@ namespace DCK_FutureTech
 
         private void IntegrityField()
         {
-            List<ModuleHullIntegrity> nanoParts = new List<ModuleHullIntegrity>(200);
-            foreach (Part p in FlightGlobals.ActiveVessel.Parts)
-            {
-                nanoParts.AddRange(p.FindModulesImplementing<ModuleHullIntegrity>());
-            }
-            foreach (ModuleHullIntegrity nanoPart in nanoParts)
+            var nanoPart = FlightGlobals.ActiveVessel.FindPartModuleImplementing<ModuleHullIntegrity>();
+            if (nanoPart != null)
             {
                 if (nanoPart.ballanceHP)
                 {
@@ -210,55 +206,41 @@ namespace DCK_FutureTech
 
         private void ToggleACS()
         {
-            List<ModuleDCKStealth> acsParts = new List<ModuleDCKStealth>(200);
-            foreach (Part p in FlightGlobals.ActiveVessel.Parts)
+            var acsPart = FlightGlobals.ActiveVessel.FindPartModuleImplementing<ModuleDCKStealth>();
+            if (acsPart != null)
             {
-                acsParts.AddRange(p.FindModulesImplementing<ModuleDCKStealth>());
-            }
-            foreach (ModuleDCKStealth acsPart in acsParts)
-            {
-                if (acsPart != null)
+                if (acsPart.jammerEnabled)
                 {
-                    if (acsPart.jammerEnabled)
-                    {
-                        acsPart.jammerEnabled = false;
-                    }
-                    else
-                    {
-                        acsPart.jammerEnabled = true;
-                    }
+                    acsPart.jammerEnabled = false;
+                }
+                else
+                {
+                    acsPart.jammerEnabled = true;
                 }
             }
         }
 
         private void ToggleACSAuto()
         {
-            List<ModuleDCKACS> acsParts = new List<ModuleDCKACS>(200);
-            foreach (Part p in FlightGlobals.ActiveVessel.Parts)
+            var acsPart = FlightGlobals.ActiveVessel.FindPartModuleImplementing<ModuleDCKACS>();
+            if (acsPart != null)
             {
-                acsParts.AddRange(p.FindModulesImplementing<ModuleDCKACS>());
-            }
-            foreach (ModuleDCKACS acsPart in acsParts)
-            {
-                if (acsPart != null)
+                if (acsPart.autoDeploy)
                 {
-                    if (acsPart.autoDeploy)
-                    {
-                        acsPart.autoDeploy = false;
-                        ScreenMsg("Active Camouflage Auto Deploy : Disengaged");
+                    acsPart.autoDeploy = false;
+                    ScreenMsg("Active Camouflage Auto Deploy : Disengaged");
 
-                    }
-                    else
-                    {
-                        acsPart.autoDeploy = true;
-                        ScreenMsg("Active Camouflage Auto Deploy : Engaged");
-
-                    }
                 }
                 else
                 {
-                    ScreenMsg("Vessel Is Not Equipped With Active Camouflage");
+                    acsPart.autoDeploy = true;
+                    ScreenMsg("Active Camouflage Auto Deploy : Engaged");
+
                 }
+            }
+            else
+            {
+                ScreenMsg("Vessel Is Not Equipped With Active Camouflage");
             }
         }
 
